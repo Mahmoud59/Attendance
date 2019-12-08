@@ -14,7 +14,7 @@ $factory->define(Attendance::class, function (Faker $faker) {
     return [
         'check_in' => $faker->time(),
         'check_out' => $faker->time(),
-        'day' => $faker->date(),
+        'day' => $faker->randomDigit,
         'employee_id' => $faker->randomElement(getEmployees()),
     ];
 });

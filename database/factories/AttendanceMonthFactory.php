@@ -13,7 +13,8 @@ function getEmployee()
 $factory->define(AttendanceMonth::class, function (Faker $faker) {
     return [
         'hours' => $faker->randomDigit,
-        'month' => $faker->date(),
+        'month' => $faker->randomDigit,
+        'year' => $faker->randomDigit,
         'employee_id' => $faker->randomElement(getEmployee()),
     ];
 });

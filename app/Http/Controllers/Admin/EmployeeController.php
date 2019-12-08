@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Model\Employee;
 use App\Model\User;
+use App\Model\AttendanceMonth;
+use App\Model\Attendance;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,10 +19,15 @@ class EmployeeController extends Controller
             $data = Employee::all();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('pin_code',function($data){
+                    return $data->pin_code;
+                })
+                ->addColumn('created_at',function($data){
+                    return $data->created_at;
+                })
+                ->addColumn('action', function($data){
 
-                    $btn = '<a href="javascript:void(0)" class="edit btn btn-primary btn-sm">View</a>';
-
+                    $btn = '<a href="employees/'.$data->id.'" class="edit btn btn-primary btn-sm">View</a>';
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -40,7 +47,7 @@ class EmployeeController extends Controller
 //        $request['user_id'] = Auth::user()->id;
         $newEmployee = Employee::create($request->all());
 
-        return redirect('employees');
+        return redirect('admin/employees');
     }
 
     /**
@@ -51,7 +58,9 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $employee = Employee::find($id);
+        $employeeAttendanceMonth = AttendanceMonth::where('employee_id', $id)->get(); 
+        return view('employee.show', compact('employee', 'employeeAttendanceMonth'));
     }
 
     /**
@@ -85,6 +94,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+    }
+
+    public function emplpoyeeDetails($employeeId, $month, $year)
+    {
+        $attendanceMonthDetails = Attendance::where('employee_id', $employeeId)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+
+        return view('employee.attendance-detail', compact('attendanceMonthDetails'));
     }
 }

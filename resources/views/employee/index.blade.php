@@ -13,16 +13,19 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 </head>
 <body>
-
+<a class="btn btn-success">{{ session('name') }}</a>
+<a class="btn btn-danger" style="text-align: right;float: right;" href="{{url('admin/logout') }}">Logout</a>
 <div class="container">
     <h1>Laravel 5.8 Datatables Tutorial <br/> HDTuto.com</h1>
-    <a class="btn btn-info" href="{{url('employees/create') }}">Add new employee</a>
+    <a class="btn btn-info" href="{{url('admin/employees/create') }}">Add new employee</a>
     <table class="table table-bordered data-table">
         <thead>
         <tr>
             <th>No</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Pin Code</th>
+            <th>Created at</th>
             <th width="100px">Action</th>
         </tr>
         </thead>
@@ -39,11 +42,13 @@
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('users.index') }}",
+            ajax: "{{ url('admin/employees') }}",
             columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
                 {data: 'email', name: 'email'},
+                {data: 'pin_code', name: 'pin_code'},
+                {data: 'created_at', name: 'created_at'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });

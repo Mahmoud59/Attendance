@@ -16,7 +16,8 @@ class CreateAttendanceMonthsTable extends Migration
         Schema::create('attendance_months', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->double('hours');
-            $table->date('month');
+            $table->integer('month');
+            $table->integer('year');
 
             $table->bigInteger('employee_id')->unsigned()->nullable();
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

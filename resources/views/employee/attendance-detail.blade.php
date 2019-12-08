@@ -11,12 +11,41 @@
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
 </head>
-<body>
-<h1>{{ $employee->name }}</h1>
-@foreach($employeeAttendanceMonth as $attendanceMonth)
-<label>Number of attendance in {{ $attendanceMonth->month }}-{{ $attendanceMonth->year }} is {{ $attendanceMonth->hours }} hours</label>
-<a href="{{ url('admin/employee/details/'.$employee->id.'/month/'.$attendanceMonth->month.'/year/'.$attendanceMonth->year) }}" style="text-align: right;float: right;" class="btn btn-info">View Details</a><br><br>
-@endforeach
-</body>
-</html>
+<a class="btn btn-primary" href="javascript:history.back()">Go Back</a>
+<table>
+
+  <tr>
+    <th>Check in</th>
+    <th>Check out</th>
+    <th>Day detail</th>
+  </tr>
+
+@foreach($attendanceMonthDetails as $attendanceDetail)
+
+  <tr>
+    <td>{{ $attendanceDetail->check_in }}</td>
+    <td>{{ $attendanceDetail->check_out }}</td>
+    <td>{{ $attendanceDetail->created_at }}</td>
+  </tr>
+
+
+@endforeach  
+</table>
