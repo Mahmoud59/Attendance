@@ -27,7 +27,7 @@ class EmployeeController extends Controller
                 ->make(true);
         }
 
-        return view('users');
+        return view('employee.index');
     }
 
     public function create()

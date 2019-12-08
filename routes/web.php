@@ -17,4 +17,7 @@ Route::get('/', function () {
 
 Route::get('users', ['uses'=>'Admin\DashboardController@index', 'as'=>'users.index']);
 
+Route::get('login', 'Admin\AuthController@login');
+Route::post('login', 'Admin\AuthController@login');
+
 Route::resource('employees', 'Admin\EmployeeController');
