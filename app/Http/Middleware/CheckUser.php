@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\APIResponseTrait;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class CheckUser
 {
-    use APIResponseTrait;
     /**
      * Handle an incoming request.
      *
@@ -18,11 +16,16 @@ class CheckUser
      */
     public function handle($request, Closure $next)
     {
-        if( Auth::guard('employee-api')->check() || Auth::guard('user-api')->user()){
+        if( Auth::guard('employee-api')->check()){
             return $next($request);
         }
         else{
-            return $this->APIResponse(null , "Unauthorized"  ,  401);
+            return response()->json([
+                'status_code' => 401,
+                'success' => false,
+                'message' => 'Unauthorized',
+                'data'  => null
+            ]);
         }
 
 

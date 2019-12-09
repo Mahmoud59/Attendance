@@ -15,5 +15,4 @@ class Employee extends Authenticatable
     protected $fillable = [
         'name', 'email', 'pin_code', 'user_id'
     ];
-
 }

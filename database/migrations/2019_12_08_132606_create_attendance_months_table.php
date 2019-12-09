@@ -15,7 +15,7 @@ class CreateAttendanceMonthsTable extends Migration
     {
         Schema::create('attendance_months', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->double('hours');
+            $table->time('hours');
             $table->integer('month');
             $table->integer('year');
 

@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
+use App\Http\Requests\Admin\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if ($request->ajax()) 
+        {
             $data = Employee::all();
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -26,7 +28,6 @@ class EmployeeController extends Controller
                     return $data->created_at;
                 })
                 ->addColumn('action', function($data){
-
                     $btn = '<a href="employees/'.$data->id.'" class="edit btn btn-primary btn-sm">View</a>';
                     return $btn;
                 })
@@ -42,63 +43,29 @@ class EmployeeController extends Controller
         return view('employee.create');
     }
 
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
-//        $request['user_id'] = Auth::user()->id;
+        if (isset($request->validator) && $request->validator->fails())
+        {
+            return view('employee.create');
+        }
+
+        $request['user_id'] = session('id');
         $newEmployee = Employee::create($request->all());
 
         return redirect('admin/employees');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show($id)   // show employee and him attendance in months
     {
         $employee = Employee::find($id);
         $employeeAttendanceMonth = AttendanceMonth::where('employee_id', $id)->get(); 
         return view('employee.show', compact('employee', 'employeeAttendanceMonth'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-
-    }
-
     public function emplpoyeeDetails($employeeId, $month, $year)
     {
+        //  Get all attendance in special month for employee
         $attendanceMonthDetails = Attendance::where('employee_id', $employeeId)->whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
 
         return view('employee.attendance-detail', compact('attendanceMonthDetails'));

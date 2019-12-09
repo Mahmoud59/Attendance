@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         factory('App\Model\User', 50)->create();
         factory('App\Model\Employee', 50)->create();
-        factory('App\Model\Attendance', 50)->create();
-        factory('App\Model\AttendanceMonth', 50)->create();
+        // factory('App\Model\Attendance', 50)->create();
+        // factory('App\Model\AttendanceMonth', 50)->create();
     }
 }

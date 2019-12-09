@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\APIs\Employee;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Employee\AuthRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Employee;
@@ -10,16 +10,21 @@ use App\Model\Employee;
 class AuthController extends Controller
 {
 
-    public function login(Request $request)
+    public function login(AuthRequest $request)
     {
-        // if (isset($request->validator) && $request->validator->fails())
-        // {
-        //     return $this->APIResponse(null , $request->validator->messages() ,  400);
-        // }
+        if (isset($request->validator) && $request->validator->fails())
+        {
+            return response()->json([
+                'status_code' => 400,
+                'success' => false,
+                'message' => $request->validator->errors()->all(),
+                'data'  => null
+            ]);
+        }
 
         $credentials = request(['email', 'pin_code']);
-
-        if(!Auth::guard('employee')->attempt(['email' => request('email'), 'pin_code' => request('pin_code')])){
+        $employee = Employee::where("email", request('email'))->where('pin_code', request('pin_code'))->first();
+        if(!$employee){
             return response()->json([
                 'status_code' => 401,
                 'success' => false,
@@ -27,7 +32,7 @@ class AuthController extends Controller
                 'data'  => null
             ]);
         }
-        $employee = Employee::where("email", request('email'))->first();
+
         $token =  $employee->createToken('token')->accessToken;
         return response()->json([
                 'status_code' => 200,
@@ -37,16 +42,25 @@ class AuthController extends Controller
             ]);
     }
 
-	public function logout(Request $request)
+	public function logout()
     {
-        $isClinicOwner = $request->user()->token()->revoke();
-        if($isClinicOwner){
-            $success['message'] = "Successfully logged out.";
-            return $this->sendResponse($success);
+        $isEmployee = Auth::guard('employee-api')->user()->token()->revoke();
+        if($isEmployee){
+            return response()->json([
+                'status_code' => 200,
+                'success' => true,
+                'message' => 'Successfully logged out',
+                'data'  => null
+            ]);
         }
-        else{
-            $error = "Something went wrong.";
-            return $this->sendResponse($error);
+        else
+        {
+            return response()->json([
+                'status_code' => 400,
+                'success' => false,
+                'message' => 'Logout Failed',
+                'data'  => null
+            ]);
         }
     }
 }

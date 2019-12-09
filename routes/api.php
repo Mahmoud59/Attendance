@@ -2,12 +2,14 @@
 
 Route::namespace('APIs\Employee')->group(function () {
 
-	Route::post('login', 'AuthController@login');
+	Route::group(['prefix' => 'employee'], function () {
 
-	Route::group(['middleware' => ['auth:employee-api']], function() {
-	    Route::get('logout', 'AuthController@logout');
-	    Route::post('check', 'AttendanceController@check');
+		Route::post('login', 'AuthController@login');	
 
-	});
+		Route::middleware('checkUser')->group(function () {
+		    Route::get('logout', 'AuthController@logout');
+		    Route::post('check', 'AttendanceController@check');		// employee check-in and check-out
 
+		});
+	});	
 });

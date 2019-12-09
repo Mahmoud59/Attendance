@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel 5.8 Datatables Tutorial - ItSolutionStuff.com</title>
+    <title>Employees</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -16,8 +16,8 @@
 <a class="btn btn-success">{{ session('name') }}</a>
 <a class="btn btn-danger" style="text-align: right;float: right;" href="{{url('admin/logout') }}">Logout</a>
 <div class="container">
-    <h1>Laravel 5.8 Datatables Tutorial <br/> HDTuto.com</h1>
-    <a class="btn btn-info" href="{{url('admin/employees/create') }}">Add new employee</a>
+    <h1>All Employees</h1>
+    <a class="btn btn-info" style="text-align: right;float: right; margin: 10px;" href="{{url('admin/employees/create') }}">Add new employee</a>
     <table class="table table-bordered data-table">
         <thead>
         <tr>
